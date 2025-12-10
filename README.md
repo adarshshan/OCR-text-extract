@@ -1,6 +1,6 @@
 # Full-Stack OCR Text Extraction Application
 
-This project is a full-stack application designed to extract structured text from documents (images and PDFs) using OCR. It features an Angular frontend and a Node.js/Express backend that uses the Tesseract.js library.
+This project is a full-stack application designed to extract structured text from documents (images and PDFs) using OCR. It features an Angular frontend and a Node.js/Express backend that uses the Google Vision API.
 
 ## Features
 
@@ -14,8 +14,8 @@ This project is a full-stack application designed to extract structured text fro
 - **Backend (Node.js & Express)**
   - API endpoint for secure file uploads (max 10MB).
   - Validates file types on the server.
-  - Uses Tesseract.js for Optical Character Recognition (OCR).
-  - A robust, regex-based parser to extract structured data from invoice-like documents.
+  - Uses Google Vision API for Optical Character Recognition (OCR).
+  - A parser to extract structured data from voter list documents.
   - Graceful error handling for OCR failures, invalid file types, and other issues.
 
 ---
@@ -32,7 +32,8 @@ This project is a full-stack application designed to extract structured text fro
 │   ├── routes/
 │   │   └── ocrRoutes.js
 │   └── utils/
-│       └── parser.js
+│       ├── googleVision.js
+│       └── parseVoterList.js
 └── frontend/
     ├── angular.json
     ├── package.json
@@ -60,7 +61,7 @@ You will need to run the backend and frontend in two separate terminals.
 
 ### 1. Backend Setup (Node.js)
 
-**Prerequisites:** [Node.js](https://nodejs.org/) (v14+) and `npm` installed.
+**Prerequisites:** [Node.js](https://nodejs.org/) (v14+) and `npm` installed. A Google Cloud Platform account with the Vision API enabled.
 
 1.  **Navigate to the backend directory:**
     ```bash
@@ -72,8 +73,14 @@ You will need to run the backend and frontend in two separate terminals.
     npm install
     ```
 
-3.  **Install Tesseract Language Data:**
-    Tesseract.js requires language training data. The parser is configured for English (`eng`). This data should be automatically downloaded on first use, but if you encounter issues, ensure you have an active internet connection.
+3.  **Set up Google Vision API Credentials:**
+    - Create a service account and download the JSON key file from the Google Cloud Console. Rename it to `key.json`.
+    - Place the `key.json` file in the `backend` directory (or any other location).
+    - Create a `.env` file in the `backend` directory.
+    - Add the following line to the `.env` file, replacing `./key.json` with the correct path to your key file if you placed it elsewhere:
+      ```
+      GOOGLE_APPLICATION_CREDENTIALS=./key.json
+      ```
 
 4.  **Start the backend server:**
     ```bash
@@ -113,16 +120,39 @@ To test the complete application flow:
     Open your web browser and navigate to `http://localhost:4200`.
 
 3.  **Prepare a Test Document:**
-    Have a sample image (like a screenshot of an invoice) or a PDF file ready. The backend parser is optimized for documents containing keywords and a structure similar to this:
-    - `Invoice Number: [value]`
-    - `Issuer Name: [value]`
-    - `Recipient Name: [value]`
-    - `Issue Date: [value]`
-    - `Due Date: [value]`
-    - A table of line items with columns for `Description`, `Quantity`, `Unit Price`, and `Total`.
-    - `Subtotal: [value]`
-    - `Tax Amount: [value]`
-    - `Total Amount Due: [value]`
+    Have a sample image of a voter list ready. The backend parser is optimized for documents that can be processed into a JSON structure like the following:
+    ```json
+    {
+        "header": {
+            "निवडणूक संस्था": "",
+            "निवडणूक विभाग": "१-",
+            "निवडणूक गण": "",
+            "यादी भाग क्रमांक": ""
+        },
+        "records": [
+            {
+                "क्रमांक": 1,
+                "EPIC": "IGY7898075",
+                "भाग": "49/1/1",
+                "मतदाराचे नाव": "डोंगरे कविता रवी",
+                "नाते": "• डोंगरे रवी",
+                "घर क्रमांक": "२",
+                "वय": "35",
+                "लिंग": "स्त्री"
+            },
+            {
+                "क्रमांक": 2,
+                "EPIC": "IGY6120034",
+                "भाग": "49/1/3",
+                "मतदाराचे नाव": "अंकित भागवत राऊत",
+                "नाते": "भागवत राऊत",
+                "घर क्रमांक": "NA",
+                "वय": "NA",
+                "लिंग": "पु"
+            }
+        ]
+    }
+    ```
 
 4.  **Upload the Document:**
     - Click the file input button on the main page.
@@ -145,4 +175,3 @@ To test the complete application flow:
 7.  **Check Browser and Server Consoles:**
     - The **browser's developer console** will show logs related to the frontend state.
     - The **terminal running the backend server** will show logs for incoming requests and any processing errors, including detailed OCR errors if they occur.
-# OCR-text-extract
