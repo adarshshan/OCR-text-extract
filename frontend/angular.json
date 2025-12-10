@@ -5,6 +5,7 @@
     "packageManager": "npm"
   },
   "newProjectRoot": "projects",
+  "prerender": false,
   "projects": {
     "frontend": {
       "projectType": "application",
