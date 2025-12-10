@@ -2,12 +2,12 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { inject, Injectable, signal } from '@angular/core';
 import { catchError, finalize, tap } from 'rxjs/operators';
 import { of } from 'rxjs';
+import { environment } from '../../environments/environment';
 
 @Injectable()
 export class OcrService {
   private readonly http = inject(HttpClient);
-  // private readonly apiUrl = 'http://localhost:5000/api/ocr/extract';
-  private readonly apiUrl = 'http://ocr.adarsh.services/api/ocr/extract';
+  private readonly apiUrl = environment.apiUrl;
 
   readonly jsonOutput = signal<any | null>(null);
   readonly loading = signal<boolean>(false);
