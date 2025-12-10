@@ -1,15 +1,23 @@
-<main class="bg-gray-100 dark:bg-gray-900 min-h-screen flex flex-col items-center py-10">
-  <div class="container mx-auto px-4">
-    <header class="text-center mb-12">
-      <h1 class="text-4xl font-extrabold text-gray-900 dark:text-white">OCR Text Extractor</h1>
-      <p class="text-gray-600 dark:text-gray-400 mt-2">
-        Upload an image or PDF to extract structured text.
+<main
+  class="min-h-screen bg-gradient-to-br from-slate-50 to-gray-100 dark:from-gray-900 dark:to-black flex flex-col items-center py-12 px-4"
+>
+  <div class="w-full max-w-7xl mx-auto">
+    <!-- Header -->
+    <header class="text-center mb-12 animate-fade-in">
+      <h1
+        class="text-5xl md:text-6xl font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-indigo-600 to-purple-600 dark:from-indigo-400 dark:to-purple-400"
+      >
+        OCR Text Extractor
+      </h1>
+      <p class="mt-4 text-lg text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
+        Upload images or PDFs and instantly extract clean, structured JSON text with powerful OCR.
       </p>
     </header>
 
-    <div class="w-full flex flex-col md:flex-row gap-2">
-      <app-upload class="w-full md:w-1/2"></app-upload>
-      <app-output class="w-full md:w-1/2"></app-output>
+    <!-- Responsive Grid: Upload + Output Side by Side on Large Screens -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+      <app-upload></app-upload>
+      <app-output></app-output>
     </div>
   </div>
 </main>

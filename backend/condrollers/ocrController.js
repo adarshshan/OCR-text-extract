@@ -1,4 +1,5 @@
-const { extractFromVision } = require("../utils/googleVisionjs");
+const { extractFromVision } = require("../utils/googleVision.js");
+const { parseVoterList } = require("../utils/parseVoterList.js");
 
 exports.processDocument = async (req, res, next) => {
   if (!req.file) {
@@ -6,13 +7,15 @@ exports.processDocument = async (req, res, next) => {
   }
 
   try {
-    const result = await extractFromVision(req.file.buffer);
+    const ocrText = await extractFromVision(req.file.buffer);
 
-    console.log("OCR Result:", result);
+    const structured = parseVoterList(ocrText);
+
+    console.log("OCR Result:", structured);
 
     res.status(200).json({
       success: true,
-      json: result,
+      json: structured,
     });
   } catch (error) {
     console.log("reached herer...in catch block");
