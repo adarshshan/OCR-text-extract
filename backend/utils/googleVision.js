@@ -2,6 +2,7 @@ const vision = require("@google-cloud/vision");
 
 const client = new vision.ImageAnnotatorClient({
   // This automatically loads GOOGLE_APPLICATION_CREDENTIALS from your .env
+  keyFilename: "/home/user/Desktop/code/text-extract/backend/key.json",
 });
 
 exports.extractFromVision = async (buffer) => {
