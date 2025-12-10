@@ -25,7 +25,6 @@ function ensureStringInput(input) {
   ) {
     return input.fullTextAnnotation.text;
   }
-  // some versions return { raw: { fullTextAnnotation: {...} } }
   if (
     input.raw &&
     input.raw.fullTextAnnotation &&
@@ -33,7 +32,6 @@ function ensureStringInput(input) {
   ) {
     return input.raw.fullTextAnnotation.text;
   }
-  // fallback: try to find first large string in object
   if (typeof input === "object") {
     try {
       const json = JSON.stringify(input);
@@ -51,7 +49,6 @@ exports.parseVoterList = function (ocrInput) {
     throw new TypeError("No OCR text found to parse.");
   }
 
-  // --- 1. HEADER EXTRACTION (allow for some noise) ---
   const header = {};
   const headerMap = {
     "निवडणूक संस्था": /निवडणूक संस्था[:\s\-–]*([^\n\r]+)/i,
@@ -65,15 +62,9 @@ exports.parseVoterList = function (ocrInput) {
     header[key] = m ? m[1].trim() : "";
   }
 
-  // --- 2. RECORD SPLITTING ---
-  // Pattern: a serial number on its own line, then EPIC and part on the same line.
-  // We'll allow EPIC to be letters/numbers (IGY...) and part like 49/1/1.
-  // Use [A-Za-z0-9\-]{5,} for EPIC (flexible).
   const blockRegex =
     /(?:^|\n)\s*(\d{1,2})\s*\n?\s*([A-Za-z0-9\-]{5,})\s+(\d+\/\d+\/\d+)([\s\S]*?)(?=(?:\n\s*\d{1,2}\s*\n)|\n\s*$)/g;
 
-  // If the OCR merged EPIC and number on one line (common), try alternative regex:
-  // We'll also try to detect occurrences like "1\nIGY7898057 49/1/1" or "1 IGY7898057 49/1/1"
   const altBlockRegex =
     /(?:^|\n)\s*(\d{1,2})\s+([A-Za-z0-9\-]{5,})\s+(\d+\/\d+\/\d+)([\s\S]*?)(?=(?:\n\s*\d{1,2}\s)|\n\s*$)/g;
 

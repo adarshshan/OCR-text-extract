@@ -10,9 +10,6 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-app.get("/testing", (req, res) => {
-  res.json("App is working");
-});
 app.use("/api/ocr", ocrRoutes);
 
 app.use((err, req, res, next) => {
