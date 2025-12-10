@@ -1,6 +1,7 @@
 {
   "version": 2,
   "public": "dist/frontend/browser",
+
   "routes": [
     {
       "src": "/(.*)",
