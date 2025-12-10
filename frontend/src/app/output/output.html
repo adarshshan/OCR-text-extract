@@ -1,0 +1,30 @@
+<div *ngIf="ocrService.jsonOutput(); else noData" class="p-4 rounded-lg mt-6">
+  <h3 class="text-xl font-semibold mb-4">Extracted JSON Output</h3>
+  <div class="flex items-center gap-4 mb-4">
+    <button
+      (click)="downloadJSON()"
+      class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors"
+    >
+      Download JSON
+    </button>
+    <button
+      #copyBtn
+      (click)="copyJSON(copyBtn)"
+      class="px-4 py-2 bg-gray-600 text-white rounded-md hover:bg-gray-700 transition-colors"
+    >
+      Copy JSON
+    </button>
+  </div>
+  <pre
+    class="w-full bg-gray-800 text-green-300 p-4 h-[80vh] overflow-y-auto rounded-lg overflow-x-auto text-sm"
+    >{{ ocrService.jsonOutput() | json }}</pre
+  >
+</div>
+
+<!-- ELSE BLOCK -->
+<ng-template #noData>
+  <div class="p-4 mt-6 border border-yellow-300 rounded-lg text-yellow-800">
+    <p class="font-medium">No OCR results yet.</p>
+    <p class="text-sm mt-1">Upload a document to extract text.</p>
+  </div>
+</ng-template>
