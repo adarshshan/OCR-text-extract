@@ -18,9 +18,7 @@ exports.processDocument = async (req, res, next) => {
       json: structured,
     });
   } catch (error) {
-    console.log("reached herer...in catch block");
     console.error("OCR Error:", error);
-    // Forward the error to the global error handler
     next(
       new Error(
         "OCR extraction failed. The document might be unreadable or corrupt."

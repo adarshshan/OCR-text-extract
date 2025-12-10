@@ -6,7 +6,8 @@ import { of } from 'rxjs';
 @Injectable()
 export class OcrService {
   private readonly http = inject(HttpClient);
-  private readonly apiUrl = 'http://localhost:5000/api/ocr/extract';
+  // private readonly apiUrl = 'http://localhost:5000/api/ocr/extract';
+  private readonly apiUrl = 'http://3.27.76.139:5000/api/ocr/extract';
 
   readonly jsonOutput = signal<any | null>(null);
   readonly loading = signal<boolean>(false);
